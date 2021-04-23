@@ -1,0 +1,7 @@
+Login:
+    controller: Login
+    action: showLogin
+
+VerifyLogin:
+    controller: Login
+    action: verifyLogin
