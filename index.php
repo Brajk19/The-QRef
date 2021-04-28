@@ -1,7 +1,10 @@
 <?php
 
-    require_once "utility/start.php";
+use dispatcher\Dispatcher;
 
-    $dispatcher = \dispatcher\Dispatcher::getInstance();
+require_once "utility/start.php";
+
+    $dispatcher = Dispatcher::getInstance();
     $dispatcher->dispatch();
+
 ?>

@@ -14,6 +14,6 @@
     };
 
     spl_autoload_register($autoload);
-
+   // \model\Login::verifyLogin();
     startSession();
 ?>

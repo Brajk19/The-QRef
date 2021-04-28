@@ -5,3 +5,11 @@ Login:
 VerifyLogin:
     controller: Login
     action: verifyLogin
+
+Register:
+    controller: Register
+    action: showRegister
+
+VerifyRegistration:
+    controller: Register
+    action: verifyRegistration
