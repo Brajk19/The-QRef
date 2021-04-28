@@ -22,6 +22,7 @@
             echo create_element("input", true, ["type" => "submit", "value" => "Register"]);
             end_form();
 
+
             $this->message();
         }
 

@@ -13,3 +13,7 @@ Register:
 VerifyRegistration:
     controller: Register
     action: verifyRegistration
+
+MainPage:
+    controller: MainPage
+    action: showMainPage

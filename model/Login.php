@@ -4,6 +4,10 @@
     use exception\IncorrectPasswordException;
     use exception\InvalidUsernameException;
 
+    /* NOTE:
+     * samo u ovoj klasi provjeravaj kolačić sessionID
+     * jer mu je path /Login
+     */
     class Login{
 
 
@@ -16,7 +20,7 @@
             $db = Database::getInstance();
 
             $query = <<<SQL
-                SELECT *
+                SELECT password.passwordHash
                 FROM password
                 WHERE password.username = :username
             SQL;

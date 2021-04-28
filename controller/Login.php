@@ -4,12 +4,16 @@
 
     use exception\IncorrectPasswordException;
     use exception\InvalidUsernameException;
+    use model\Cookie;
+    use router\Router;
     use view\LoginErrorScreen;
     use view\LoginScreen;
 
     class Login {
-
-        public function __construct() {}
+        private Router $router;
+        public function __construct() {
+            $this->router = Router::getInstance();
+        }
 
         public function showLogin(): void{
             $ls = new LoginScreen();
@@ -18,23 +22,22 @@
 
         public function verifyLogin(): void{
             try{
-                $successfulLogin = \model\Login::verifyLogin($_POST["username"], $_POST["password"]);
+                $sessionID = \model\Login::verifyLogin($_POST["username"], $_POST["password"]);
 
-                if($successfulLogin === true){
-                    //TODO - valja
-                    //dodati session ID u kolacice i bazu podataka
-                }
-                else{
-                    //TODO - ne valja
-                    //poruka da
-                }
+                setcookie("sessionID", $sessionID, time() + 86400);
+                //jednom dnevno je potrebno ulogirat se (naravno osim ako se ne odjavis)
+
+                $c = new Cookie();
+                $c->addSession($_POST["username"], $sessionID);
+
+                $nextPage = $this->router->getRoute("MainPage");
+                header("Location: $nextPage");
+                die();
             }
             catch(InvalidUsernameException | IncorrectPasswordException $e) {
                 $ls = new LoginErrorScreen($e);
                 $ls->generateHTML();
             }
-
-
         }
 
         /**
