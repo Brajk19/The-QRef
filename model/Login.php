@@ -12,21 +12,21 @@
 
 
         /**
-         * @param string $username Username
+         * @param string $email E-mail
          * @param string $password Password
-         * @return string Returns new session ID if login was successful or NULL if username does not exist / password was wrong.
+         * @return string Returns new session ID if login was successful or NULL if email does not exist / password was wrong.
          */
-        public static function verifyLogin(string $username, string $password): string {
+        public static function verifyLogin(string $email, string $password): string {
             $db = Database::getInstance();
 
             $query = <<<SQL
                 SELECT password.passwordHash
                 FROM password
-                WHERE password.username = :username
+                WHERE password.email = :email
             SQL;
 
             $data = $db->prepare($query);
-            $data->execute([":username" => $username]);
+            $data->execute([":email" => $email]);
             $data = $data->fetchAll();
 
             if(empty($data)){
@@ -42,7 +42,6 @@
                     }
                     // TODO
                     // sessionID dodati u databasu i kolacice
-                    echo $sessionID;
                     return $sessionID;
                 }
                 else{

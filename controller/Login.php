@@ -4,6 +4,7 @@
 
     use exception\IncorrectPasswordException;
     use exception\InvalidUsernameException;
+    use exception\SuccessfulRegistrationException;
     use model\Cookie;
     use router\Router;
     use view\LoginErrorScreen;
@@ -20,15 +21,17 @@
             $ls->generateHTML();
         }
 
+        public function successfulRegistration(): void{
+            $ls = new LoginErrorScreen(new SuccessfulRegistrationException());
+            $ls->generateHTML();
+        }
+
         public function verifyLogin(): void{
             try{
                 $sessionID = \model\Login::verifyLogin($_POST["username"], $_POST["password"]);
 
-                setcookie("sessionID", $sessionID, time() + 86400);
-                //jednom dnevno je potrebno ulogirat se (naravno osim ako se ne odjavis)
-
-                $c = new Cookie();
-                $c->addSession($_POST["username"], $sessionID);
+                Cookie::setCookie($sessionID);
+                Cookie::addSession($_POST["username"], $sessionID);
 
                 $nextPage = $this->router->getRoute("MainPage");
                 header("Location: $nextPage");
@@ -40,20 +43,14 @@
             }
         }
 
-        /**
-         * @return bool Returns true if someone is already logged in.
-         */
-        public function isLoggedIn(): bool {
-            /* kad se korisnik ulogira, on dobije svoj session ID koji se spremi u kolačiće
-             * i traje tjedan dana tako da se ne mora svaki put opet ulogirati
-            */
+        public function logoutUser(): void{
+            Cookie::deleteSession($_COOKIE["sessionID"]);
+            Cookie::deleteCookie();
 
-            if(isset($_COOKIE["sessionID"])){
-                return true;
-            }
-
-            return false;
+            $ls = new LoginScreen();
+            $ls->generateHTML();
         }
+
     }
 
 ?>

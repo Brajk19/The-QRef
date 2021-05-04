@@ -20,7 +20,7 @@
             begin_html();
 
             begin_head();
-            echo create_element("title", true, ["contents" => "Movies"]);
+            echo create_element("title", true, ["contents" => "The QRef ?"]);
             echo create_element("meta", false, ["charset" => "UTF-8"]);
             end_head();
 

@@ -1,6 +1,7 @@
 <?php
     namespace dispatcher;
 
+    use model\Cookie;
     use router\Router;
 
     class Dispatcher {
@@ -21,10 +22,18 @@
             $route = $_SERVER["REQUEST_URI"];
 
             if($route === "/"){
-                /*  TODO
-                 * provjeri ako je vec ulogiran, u tom slucaju ga salji na homepage
-                 */
-
+                if(isset($_COOKIE["sessionID"])){
+                    if(Cookie::checkSessionID($_COOKIE["sessionID"])){
+                        $route = Router::getInstance();
+                        $nextPage = $route->getRoute("MainPage");
+                        header("Location: $nextPage");
+                    }
+                    else{
+                        //nevaljan cookie
+                            Cookie::deleteSession($_COOKIE["sessionID"]);
+                            Cookie::deleteCookie();
+                    }
+                }
                 $route = Router::getInstance()->getRoute("Login");
             }
 

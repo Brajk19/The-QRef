@@ -2,6 +2,10 @@ Login:
     controller: Login
     action: showLogin
 
+Logout:
+    controller: Login
+    action: logoutUser
+
 VerifyLogin:
     controller: Login
     action: verifyLogin
@@ -13,6 +17,10 @@ Register:
 VerifyRegistration:
     controller: Register
     action: verifyRegistration
+
+SuccessfulRegistration:
+    controller: Login
+    action: successfulRegistration
 
 MainPage:
     controller: MainPage
