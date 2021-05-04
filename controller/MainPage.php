@@ -10,6 +10,10 @@
             $mp = new \view\MainPage();
             $mp->generateHTML();
         }
+
+        public function showSettings(): void{
+            //TODO
+        }
     }
 
 ?>

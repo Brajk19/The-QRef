@@ -25,3 +25,23 @@ SuccessfulRegistration:
 MainPage:
     controller: MainPage
     action: showMainPage
+
+Settings:
+    controller: MainPage
+    action: showSettings
+
+CreateQuiz:
+    controller: UNKNOWN
+    action: UNKNOWN
+
+QuizList:
+    controller: UNKNOWN
+    action: UNKNOWN
+
+Stats:
+    controller: UNKNOWN
+    action: UNKNOWN
+
+Challenge:
+    controller: UNKNOWN
+    action: UNKNOWN

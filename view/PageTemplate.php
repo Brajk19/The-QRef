@@ -22,6 +22,12 @@
             begin_head();
             echo create_element("title", true, ["contents" => "The QRef ?"]);
             echo create_element("meta", false, ["charset" => "UTF-8"]);
+            echo create_element("link", false, ["href" => "https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap",
+                    "rel" => "stylesheet"]);
+            begin_style();
+            Css::printHTML();
+            end_style();
+
             end_head();
 
             begin_body([]);
@@ -33,3 +39,4 @@
     }
 
 ?>
+

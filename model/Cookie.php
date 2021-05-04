@@ -5,20 +5,20 @@
     class Cookie{
 
         /**
-         * @param string $username
+         * @param string $email
          * @param string $sessionID
          * Adds new session to database.
          */
-        public static function addSession(string $username, string $sessionID): void {
+        public static function addSession(string $email, string $sessionID): void {
             $db = Database::getInstance();
 
             $query = <<<SQL
                 INSERT INTO session
-                VALUES (:sessionID, :username)
+                VALUES (:sessionID, :email)
             SQL;
 
             $data = $db->prepare($query);
-            $data->execute([":sessionID" => $sessionID, ":username" => $username]);
+            $data->execute([":sessionID" => $sessionID, ":email" => $email]);
         }
 
         /**
