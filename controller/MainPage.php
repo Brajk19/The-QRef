@@ -11,9 +11,6 @@
             $mp->generateHTML();
         }
 
-        public function showSettings(): void{
-            //TODO
-        }
     }
 
 ?>

@@ -5,7 +5,7 @@
 
     class Css {
         public static function printHTML(): void{
-            addTagClass("*", ["font-family" => "'Nanum Pen Script', cursive"]);
+            addTagClass("*", ["font-family" => "Nanum Pen Script"]);
 
             addCustomClass("gridHeader", ["display" => "grid", "grid-template-columns" => "50% 20% 20% 10%",
                     "grid-template-rows" => "90px", "align-items" => "center", "padding" => "15px"]);
@@ -22,6 +22,16 @@
                 "border-radius" => "98% 2% 99% 1% / 5% 92% 8% 95%"]);
             addCustomClass("bar", ["height" => "45px"]);
             addCustomClass("bar:hover", ["height" => "55px"]);
+
+            addCustomClass("settingsGrid", ["display" => "grid", "grid-template-columns" => "50% 50%",
+                "font-size" => "30px"]);
+
+            addCustomClass("cell", ["padding-left" => "20px", "padding-right" => "20px", "border" => "2px solid black"]);
+
+            addCustomClass("changePassword", ["text-align" => "center"]);
+            addCustomClass("changePassword:hover", ["background-color" => "lightgreen"]);
+
+            addCustomClass("changePasswordForm", ["font-size" => "25px"]);
 
         }
     }

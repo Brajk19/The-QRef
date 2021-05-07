@@ -27,8 +27,16 @@ MainPage:
     action: showMainPage
 
 Settings:
-    controller: MainPage
+    controller: Settings
     action: showSettings
+
+ChangePasswordForm:
+    controller: Settings
+    action: changePasswordForm
+
+VerifyNewPassword:
+    controller: Settings
+    action: verifyNewPassword
 
 CreateQuiz:
     controller: UNKNOWN
@@ -43,5 +51,9 @@ Stats:
     action: UNKNOWN
 
 Challenge:
+    controller: UNKNOWN
+    action: UNKNOWN
+
+ChangePassword:
     controller: UNKNOWN
     action: UNKNOWN

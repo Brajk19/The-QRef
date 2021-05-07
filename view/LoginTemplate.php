@@ -13,7 +13,7 @@
 
         protected function generateBody():void {
             start_form($this->router->getRoute("VerifyLogin"), "POST");
-            echo create_element("input", true, ["name" => "username", "type" => "text", "placeholder" => "Username"]);
+            echo create_element("input", true, ["name" => "email", "type" => "text", "placeholder" => "E-mail"]);
             echo create_element("input", true, ["name" => "password", "type" => "password", "placeholder" => "Password"]);
             echo create_element("input", true, ["type" => "submit", "value" => "Login"]);
             end_form();

@@ -28,10 +28,14 @@
 
         public function verifyLogin(): void{
             try{
-                $sessionID = \model\Login::verifyLogin($_POST["username"], $_POST["password"]);
+                $sessionID = \model\Login::verifyLogin($_POST["email"], $_POST["password"]);
 
                 Cookie::setCookie($sessionID);
-                Cookie::addSession($_POST["username"], $sessionID);
+                Cookie::addSession($_POST["email"], $sessionID);
+
+                endSession();
+                startSession();
+                $_SESSION["email"] = $_POST["email"];
 
                 $nextPage = $this->router->getRoute("MainPage");
                 header("Location: $nextPage");
@@ -46,6 +50,9 @@
         public function logoutUser(): void{
             Cookie::deleteSession($_COOKIE["sessionID"]);
             Cookie::deleteCookie();
+
+            endSession();
+            startSession();
 
             $ls = new LoginScreen();
             $ls->generateHTML();
