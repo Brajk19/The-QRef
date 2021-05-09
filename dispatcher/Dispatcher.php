@@ -18,23 +18,55 @@
             return self::$object;
         }
 
+        /**
+         * If user is not logged in, he will be only allowed to access pages for logging in / registration
+         * and he will be able to solve quiz if he has URL of quiz.
+         * Every other request will be rerouted to login page.
+         */
         public function dispatch(): void {
             $route = $_SERVER["REQUEST_URI"];
+            $allowedRoutes = ["Login", "Logout", "VerifyLogin", "Register", "VerifyRegistration",
+                "SuccessfulRegistration"]; //allowed routed for user that's not logged in. TODO add route for quiz later
 
-            if($route === "/"){
-                if(isset($_COOKIE["sessionID"])){
-                    if(Cookie::checkSessionID($_COOKIE["sessionID"])){
-                        $route = Router::getInstance();
-                        $nextPage = $route->getRoute("MainPage");
-                        header("Location: $nextPage");
+            if(isset($_COOKIE["sessionID"])){
+                if(!Cookie::checkSessionID($_COOKIE["sessionID"])){
+                    Cookie::deleteSession($_COOKIE["sessionID"]);
+                    Cookie::deleteCookie();
+
+                    $nextPage = Router::getInstance()->getRoute("Login");
+                    header("Location: $nextPage");
+                    die();
+                }
+                else {
+                    $validRoute = false;
+                    foreach (Router::getInstance()->getAllRoutes() as $routeName){
+                        if($_SERVER["REQUEST_URI"] === Router::getInstance()->getRoute($routeName)){
+                            $validRoute = true;
+                            break;
+                        }
                     }
-                    else{
-                        //nevaljan cookie
-                            Cookie::deleteSession($_COOKIE["sessionID"]);
-                            Cookie::deleteCookie();
+
+                    if(!$validRoute){
+                        $nextPage = Router::getInstance()->getRoute("MainPage");
+                        header("Location: $nextPage");
+                        die();
                     }
                 }
-                $route = Router::getInstance()->getRoute("Login");
+            }
+            else {
+                $found = false;
+                foreach($allowedRoutes as $r){
+                    if($_SERVER["REQUEST_URI"] === Router::getInstance()->getRoute($r)){
+                        $found = true;
+                        break;
+                    }
+                }
+
+                if(!$found){
+                    $nextPage = Router::getInstance()->getRoute("Login");
+                    header("Location: $nextPage");
+                    die();
+                }
             }
 
             $route = substr($route, 1);

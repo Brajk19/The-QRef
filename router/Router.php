@@ -29,6 +29,10 @@
 
             return "/" . $route["controller"] . "/" . $route["action"];
         }
+
+        public function getAllRoutes(): array{
+            return array_keys($this->routes);
+        }
     }
 
 ?>

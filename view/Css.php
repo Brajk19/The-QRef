@@ -33,6 +33,10 @@
 
             addCustomClass("changePasswordForm", ["font-size" => "25px"]);
 
+            addCustomClass("createQuiz", ["display" => "grid", "grid-template-columns" => "50% auto auto",
+                "font-size" => "20px"]);
+            addCustomClass("quizCreateError", ["text-align" => "center", "font-size" => "25px", "color" => "red"]);
+            addCustomClass("quizCreateSuccess", ["text-align" => "center", "font-size" => "25px", "color" => "lightgreen"]);
         }
     }
 

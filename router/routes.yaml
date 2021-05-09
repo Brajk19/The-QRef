@@ -39,8 +39,16 @@ VerifyNewPassword:
     action: verifyNewPassword
 
 CreateQuiz:
-    controller: UNKNOWN
-    action: UNKNOWN
+    controller: CreateQuiz
+    action: showCreateQuizPage
+
+VerifyQuiz:
+    controller: CreateQuiz
+    action: verifyQuiz
+
+AddRandomQuestion:
+    controller: CreateQuiz
+    action: addRandomQuestion
 
 QuizList:
     controller: UNKNOWN

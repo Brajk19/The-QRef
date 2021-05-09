@@ -46,7 +46,7 @@
             $db = Database::getInstance();
 
             $query = <<<SQL
-                SELECT COUNT(*) as findSession
+                SELECT COUNT(*) as findSession, session.email
                 FROM session
                 WHERE session.sessionID = :sessionID
             SQL;
@@ -56,6 +56,7 @@
             $data = $data->fetchAll();
 
             if($data[0]["findSession"] === "1"){
+                $_SESSION["email"] = $data[0]["email"];
                 return true;
             }
             return false;

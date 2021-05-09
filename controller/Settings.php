@@ -2,10 +2,10 @@
 
     namespace controller;
 
-
     use exception\DifferentPasswordException;
     use exception\IncorrectOldPasswordException;
     use exception\IncorrectPasswordFormatException;
+    use exception\SuccessfulPasswordChange;
     use model\User;
     use view\ChangePassword;
     use view\ChangePasswordError;
@@ -37,12 +37,16 @@
                     throw new IncorrectPasswordFormatException();
                 }
 
-                //succesful password change
+                //successful password change
                 User::changePassword($_POST["newPassword"]);
-                echo "radiiiiiiiiiiiii";
+                throw new SuccessfulPasswordChange();
             }
             catch(IncorrectOldPasswordException | IncorrectPasswordFormatException | DifferentPasswordException $e){
-                $cpe = new ChangePasswordError($e);
+                $cpe = new ChangePasswordError($e, "red");
+                $cpe->generateHTML();
+            }
+            catch(SuccessfulPasswordChange $e){
+                $cpe = new ChangePasswordError($e, "green");
                 $cpe->generateHTML();
             }
         }
