@@ -8,8 +8,6 @@
     use exception\InvalidQrefFileException;
     use exception\NoQuestionsUploadedException;
     use exception\QuizCreateSuccessException;
-    use exception\SuccessfulRegistrationException;
-    use router\Router;
     use utility\OpenTriviaDatabaseAPI;
 
     class CreateQuiz {

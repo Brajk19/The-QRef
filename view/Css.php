@@ -6,6 +6,8 @@
     class Css {
         public static function printHTML(): void{
             addTagClass("*", ["font-family" => "Nanum Pen Script"]);
+            addTagClass("body", ["background-image" => "url('../../resources/bg.jpg')",
+                "background-size" => "cover"]);
 
             addCustomClass("gridHeader", ["display" => "grid", "grid-template-columns" => "50% 20% 20% 10%",
                     "grid-template-rows" => "90px", "align-items" => "center", "padding" => "15px"]);
@@ -37,6 +39,9 @@
                 "font-size" => "20px"]);
             addCustomClass("quizCreateError", ["text-align" => "center", "font-size" => "25px", "color" => "red"]);
             addCustomClass("quizCreateSuccess", ["text-align" => "center", "font-size" => "25px", "color" => "lightgreen"]);
+
+            addCustomClass("quizTable", ["text-align" => "center", "margin" => "auto", "border" => "2px solid black",
+                "border-collapse" => "collapse", "font-size" => "20px"]);
         }
     }
 

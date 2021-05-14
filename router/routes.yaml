@@ -50,6 +50,17 @@ AddRandomQuestion:
     controller: CreateQuiz
     action: addRandomQuestion
 
+SolveQuizAnonymous:
+    controller: SolveQuiz
+    action: anonymous
+    id: <id>
+
+VerifyAnswers:
+    controller: SolveQuiz
+    action: verifyAnswers
+    id: <id>        #this line is useless, have to include id because SolveQuiz controller
+                    #requires id when creating new instance
+
 QuizList:
     controller: UNKNOWN
     action: UNKNOWN
@@ -62,6 +73,3 @@ Challenge:
     controller: UNKNOWN
     action: UNKNOWN
 
-ChangePassword:
-    controller: UNKNOWN
-    action: UNKNOWN

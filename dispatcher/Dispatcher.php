@@ -6,6 +6,7 @@
 
     class Dispatcher {
         private static ?Dispatcher $object = NULL;
+        private array $arr;
 
         private function __construct() {}
         private function __clone() {}
@@ -26,7 +27,10 @@
         public function dispatch(): void {
             $route = $_SERVER["REQUEST_URI"];
             $allowedRoutes = ["Login", "Logout", "VerifyLogin", "Register", "VerifyRegistration",
-                "SuccessfulRegistration"]; //allowed routed for user that's not logged in. TODO add route for quiz later
+                "SuccessfulRegistration", "SolveQuizAnonymous", "VerifyAnswers"];    //allowed routes if you are not logged in
+
+            $route = substr($route, 1);
+            $this->arr = explode("/", $route);
 
             if(isset($_COOKIE["sessionID"])){
                 if(!Cookie::checkSessionID($_COOKIE["sessionID"])){
@@ -40,10 +44,9 @@
                 else {
                     $validRoute = false;
                     foreach (Router::getInstance()->getAllRoutes() as $routeName){
-                        if($_SERVER["REQUEST_URI"] === Router::getInstance()->getRoute($routeName)){
-                            $validRoute = true;
-                            break;
-                        }
+                        $validRoute = $this->checkRoute($routeName);
+
+                        if($validRoute) break;
                     }
 
                     if(!$validRoute){
@@ -56,10 +59,9 @@
             else {
                 $found = false;
                 foreach($allowedRoutes as $r){
-                    if($_SERVER["REQUEST_URI"] === Router::getInstance()->getRoute($r)){
-                        $found = true;
-                        break;
-                    }
+                    $found = $this->checkRoute($r);
+
+                    if($found) break;
                 }
 
                 if(!$found){
@@ -69,17 +71,34 @@
                 }
             }
 
-            $route = substr($route, 1);
-            $arr = explode("/", $route);
-            $controller = $arr[0];
-            $action = $arr[1];
 
-            if(count($arr) === 2){
-                $class = "\\controller\\$controller";
+            $controller = $this->arr[0];
+            $action = $this->arr[1];
+
+            $class = "\\controller\\$controller";
+
+            if(count($this->arr) === 2){
                 $object = new $class;
+            }
+            else{
+                $id = intval($this->arr[2]);
+                $object = new $class($id);
             }
 
             $object->$action();
+        }
+
+        private function checkRoute(string $routeName): bool {
+            if(count($this->arr) === 3){
+                if($_SERVER["REQUEST_URI"] === Router::getInstance()->getRoute($routeName, intval($this->arr[2]))){
+                    return true;
+                }
+            }
+            else if($_SERVER["REQUEST_URI"] === Router::getInstance()->getRoute($routeName)){
+                return true;
+            }
+
+            return false;
         }
     }
 

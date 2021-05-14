@@ -24,8 +24,14 @@
             return self::$object;
         }
 
-        public function getRoute(string $name): string {
+        public function getRoute(string $name, int $id = 1): string {
             $route = $this->routes[$name];
+
+            if(isset($route["id"])){
+                $route["id"] = str_replace("<id>", strval($id), $route["id"]);
+
+                return "/" . $route["controller"] . "/" . $route["action"] . "/" . $route["id"];
+            }
 
             return "/" . $route["controller"] . "/" . $route["action"];
         }
