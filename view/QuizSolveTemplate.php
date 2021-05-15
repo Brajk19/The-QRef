@@ -61,7 +61,7 @@
                     for($j = 0; $j < 4; $j++){
                         add_to_element($cell2, create_element("input", true, ["type" => "radio", "name" => "question$i",
                                                             "value" => $q["options"][$j]]));
-                        add_to_element($cell2, create_element("label", true, ["contents" => $q["options"][$j]]));
+                        add_to_element($cell2, create_element("label", true, ["contents" => trim($q["options"][$j])]));
                         add_to_element($cell2, create_element("br", true, []));
                     }
                     $_SESSION["question$i"] = [1, $q["answers"][0]];
@@ -72,7 +72,7 @@
                         $jj = $j + 1;
                         add_to_element($cell2, create_element("input", true, ["type" => "checkbox", "name" => "question$i-$jj",
                                                             "value" => $q["options"][$j]]));
-                        add_to_element($cell2, create_element("label", true, ["contents" => $q["options"][$j]]));
+                        add_to_element($cell2, create_element("label", true, ["contents" => trim($q["options"][$j])]));
                         add_to_element($cell2, create_element("br", true, []));
                     }
 

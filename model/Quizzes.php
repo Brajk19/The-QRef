@@ -110,6 +110,84 @@
 
             return $data->fetchAll();
         }
+
+        /**
+         * @param string $id
+         * @return bool
+         * Returns true if commenting is enabled on quiz.
+         */
+        public static function commentsEnabled(string $id): bool{
+            $db = Database::getInstance();
+
+            $query = <<< SQL
+                SELECT quiz.comments
+                FROM quiz
+                WHERE quiz.id = :id
+            SQL;
+
+            $data = $db->prepare($query);
+            $data->execute([":id" => $id]);
+            $data = $data->fetchAll()[0];
+
+            return $data["comments"] === "1";
+
+        }
+
+        /**
+         * @param string $quizID
+         * @param string $email
+         * @param string $comment
+         * Stores a comment in database.
+         */
+        public static function addComment(string $quizID, string $email, string $comment): void{
+         $db = Database::getInstance();
+         $time = strval(time());
+
+         $query = <<<SQL
+            INSERT INTO comment
+            VALUES (:quizID, :email, :comment, :time)
+         SQL;
+
+         $data = $db->prepare($query);
+         $data->execute([":quizID" => $quizID, ":email" => $email, ":comment" => $comment, ":time" => $time]);
+        }
+
+        /**
+         * @param string $quizID
+         * @return array
+         * Returns all comments on selected quiz.
+         * Format: [[avatar, firstname, lastname, comment], [], [], ...]
+         */
+        public static function getComments(string $quizID): array{
+            $db = Database::getInstance();
+
+            $query = <<< SQL
+                SELECT avatar.avatar, user.firstName, user.lastName, comment.comment
+                FROM comment NATURAL JOIN user
+                    NATURAL JOIN avatar
+                WHERE comment.quizID = :quizID
+                ORDER BY comment.time DESC
+            SQL;
+
+            $data = $db->prepare($query);
+            $data->execute([":quizID" => $quizID]);
+            $data = $data->fetchAll();
+
+            // _text_ will be underline
+            // *text* will be bold
+            for ($i = 0; $i < count($data); $i++){
+                while(substr_count($data[$i]["comment"], "*") >= 2){
+                    $data[$i]["comment"] = preg_replace("~\*~", "<b>", $data[$i]["comment"], 1);
+                    $data[$i]["comment"] = preg_replace("~\*~", "</b>", $data[$i]["comment"], 1);
+                }
+                while(substr_count($data[$i]["comment"], "_") >= 2){
+                    $data[$i]["comment"] = preg_replace("~_~", "<u>", $data[$i]["comment"], 1);
+                    $data[$i]["comment"] = preg_replace("~_~", "</u>", $data[$i]["comment"], 1);
+                }
+            }
+
+            return $data;
+        }
     }
 
 ?>

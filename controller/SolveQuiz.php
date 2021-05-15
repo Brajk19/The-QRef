@@ -148,10 +148,15 @@
 
             //cleaning up
             foreach ($_SESSION as $key => $value){
-                if($key !== ["email"]){
+                if($key !== "email" && $key !== "quizID"){
                     unset($_SESSION[$key]);
                 }
             }
+
+            //needed for posting comments
+            $_SESSION["q"] = $q;
+            $_SESSION["ua"] = $userAnswers;
+            $_SESSION["aa"] = $arrAns;
         }
 
 
@@ -211,6 +216,8 @@
 
             return $q;
         }
+
+
 
     }
 

@@ -66,6 +66,10 @@ VerifyAnswers:
     id: <id>        #this line is useless, have to include id because SolveQuiz controller
                     #requires id when creating new instance
 
+AddComment:
+    controller: Comments
+    action: addComment
+
 QuizList:
     controller: UNKNOWN
     action: UNKNOWN

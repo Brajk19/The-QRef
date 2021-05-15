@@ -90,6 +90,23 @@
             $data = $db->prepare($query);
             $data->execute([":email" => $_SESSION["email"], ":passwordHash" => $passwordHash]);
         }
+
+        public static function getAvatar(string $email): string{
+            $db = Database::getInstance();
+
+            $query = <<< SQL
+                SELECT avatar.avatar
+                FROM avatar
+                WHERE avatar.email = :email
+            SQL;
+
+            $data = $db->prepare($query);
+            $data->execute([":email" => $email]);
+            $data = $data->fetchAll()[0];
+
+            return $data["avatar"];
+
+        }
     }
 
 ?>
