@@ -4,9 +4,7 @@
 
     use Exception;
 
-    class QuizSolveAnonymous extends QuizSolveTemplate {
-
-
+    class QuizSolveUser extends QuizSolveTemplate {
         public function __construct(Exception $e = NULL, array $quiz = NULL) {
             parent::__construct();
 
@@ -14,11 +12,11 @@
             $this->quiz = $quiz;    //inherited from QuizSolveTemplate
         }
 
-
         protected function generateBody():void {
-            MainPageHeaderEmpty::printHTML();
+            MainPageHeader::printHTML();
             echo create_element("p", true, ["style" => "margin-top:50px"]);
             $this->pageContent();
+
         }
     }
 

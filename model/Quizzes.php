@@ -69,6 +69,47 @@
             return $questions;
 
         }
+
+        /**
+         * @param string $quizID
+         * @param string $email
+         * @param int $score
+         * Stores score from quiz to database.
+         */
+        public static function storeResult(string $quizID, string $email, int $score): void{
+            $db = Database::getInstance();
+
+            $query = <<<SQL
+                INSERT INTO result
+                VALUES (:quizID, :email, :score)
+            SQL;
+
+            $data = $db->prepare($query);
+            $data->execute([":quizID" => $quizID, ":email" => $email, ":score" => $score]);
+        }
+
+        /**
+         * @param string $email
+         * @return array
+         * Returns number of attempts and average score for each quiz user took.
+         * Format: [[name => quiz name, attempts => number of attempts, avg => average score], [], ...]
+         */
+        public static function getStats(string $email): array{
+            $db = Database::getInstance();
+
+            $query = <<<SQL
+                SELECT quiz.name, COUNT(*) as attempts, AVG(score) as avg
+                FROM quiz JOIN result
+                ON result.quizID = quiz.id
+                WHERE result.email = :email
+                GROUP BY result.quizID
+            SQL;
+
+            $data = $db->prepare($query);
+            $data->execute([":email" => $email]);
+
+            return $data->fetchAll();
+        }
     }
 
 ?>

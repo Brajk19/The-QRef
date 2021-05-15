@@ -31,6 +31,8 @@
 
             $route = substr($route, 1);
             $this->arr = explode("/", $route);
+            $this->arr[0] = ucfirst($this->arr[0]);
+
 
             if(isset($_COOKIE["sessionID"])){
                 if(!Cookie::checkSessionID($_COOKIE["sessionID"])){
@@ -89,12 +91,13 @@
         }
 
         private function checkRoute(string $routeName): bool {
+
             if(count($this->arr) === 3){
-                if($_SERVER["REQUEST_URI"] === Router::getInstance()->getRoute($routeName, intval($this->arr[2]))){
+                if(strtolower($_SERVER["REQUEST_URI"]) === strtolower(Router::getInstance()->getRoute($routeName, intval($this->arr[2])))){
                     return true;
                 }
             }
-            else if($_SERVER["REQUEST_URI"] === Router::getInstance()->getRoute($routeName)){
+            else if(strtolower($_SERVER["REQUEST_URI"]) === strtolower(Router::getInstance()->getRoute($routeName))){
                 return true;
             }
 

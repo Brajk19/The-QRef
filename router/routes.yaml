@@ -55,6 +55,11 @@ SolveQuizAnonymous:
     action: anonymous
     id: <id>
 
+SolveQuizUser:
+    controller: SolveQuiz
+    action: loggedIn
+    id: <id>
+
 VerifyAnswers:
     controller: SolveQuiz
     action: verifyAnswers

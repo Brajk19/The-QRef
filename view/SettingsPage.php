@@ -3,6 +3,7 @@
     namespace view;
 
 
+    use model\Quizzes;
     use model\User;
     use router\Router;
 
@@ -54,18 +55,30 @@
             return $table;
         }
 
+        private function fillStatsTable(array $stats): string{
+            $str = "";
+            foreach ($stats as $quiz){
+                $cell1 = create_table_cell(["contents" => $quiz["name"], "style" => "border:2px solid black"]);
+                $cell2 = create_table_cell(["contents" => $quiz["attempts"], "style" => "border:2px solid black"]);
+                $cell3 = create_table_cell(["contents" => $quiz["avg"], "style" => "border:2px solid black"]);
+
+                $str .= create_table_row(["contents" => [$cell1, $cell2, $cell3]]);
+            }
+
+            return $str;
+        }
+
         private function scoreTable(): string{
-            /*
-             * TODO
-             * ucitavanje podataka o igranju iz baze podataka
-             */
+            $stats = Quizzes::getStats($_SESSION["email"]);
+
             $h1 = create_element("th", true, ["class" => "cell", "contents" => "Quiz Name"]);
             $h2 = create_element("th", true, ["class" => "cell", "contents" => "Attempts"]);
             $h3 = create_element("th", true, ["class" => "cell", "contents" => "Average score"]);
             $row1 = create_table_row(["contents" => [$h1, $h2, $h3]]);
 
-            $table = create_element("table", false, ["style" => "border-collapse:collapse"]);
+            $table = create_element("table", false, ["style" => "border-collapse:collapse; text-align:center"]);
             add_to_element($table, $row1);
+            add_to_element($table, $this->fillStatsTable($stats));
             close_element($table);
 
             return $table;

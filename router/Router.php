@@ -30,10 +30,10 @@
             if(isset($route["id"])){
                 $route["id"] = str_replace("<id>", strval($id), $route["id"]);
 
-                return "/" . $route["controller"] . "/" . $route["action"] . "/" . $route["id"];
+                return trim("/" . $route["controller"] . "/" . $route["action"] . "/" . $route["id"]);
             }
 
-            return "/" . $route["controller"] . "/" . $route["action"];
+            return trim("/" . $route["controller"] . "/" . $route["action"]);
         }
 
         public function getAllRoutes(): array{

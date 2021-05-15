@@ -7,7 +7,9 @@
     use JetBrains\PhpStorm\NoReturn;
     use model\Quizzes;
     use view\QuizFinishAnonymous;
+    use view\QuizFinishUser;
     use view\QuizSolveAnonymous;
+    use view\QuizSolveUser;
 
     class SolveQuiz {
         private int $quizID;
@@ -18,9 +20,17 @@
         }
 
         public function loggedIn(): void{
-            if($this->checkQuizID()){
+            $x = $this->checkQuizID();
+            if($x == true){
                 $readyQuiz = $this->formatQuiz();
                 $_SESSION["quizID"] = $this->quizID;
+
+                $qsu = new QuizSolveUser(NULL, $readyQuiz);
+                $qsu->generateHTML();
+            }
+            else{
+                $q = new QuizSolveUser($x);
+                $q->generateHTML();
             }
         }
 
@@ -61,6 +71,7 @@
          */
         public function verifyAnswers(): void{
             $num = 1;
+            $score = 0;
 
             $arrAns = []; //true for correct answers, false for wrong, NULL for partially correct
             $userAnswers = [];  // format [ [[selected1, selected2,...], [correct1, correct2,...], points], [] ]
@@ -77,11 +88,13 @@
                         else if(trim(strtolower($_SESSION["question$num"][1])) === trim(strtolower($_POST["question$num"]))){
                             $arrAns[] = true;
                             $userAnswers[] = [[$_POST["question$num"]], [$_SESSION["question$num"][1]], 1];
+                            $score++;
                         }
                         else{
                             $arrAns[] = false;
                             $userAnswers[] = [[$_POST["question$num"]], [$_SESSION["question$num"][1]], 0];
                         }
+
 
                         break;
 
@@ -100,7 +113,7 @@
                         }
 
                         //checks if it's completely correct, partially correct or if everything's wrong
-                        if(empty(array_diff($correct, $selected))){
+                        if(empty(array_diff($correct, $selected)) && count($correct) === count($selected)){
                             $arrAns[] = true;
                         }
                         else if(!empty(array_intersect($selected, $correct))){
@@ -111,6 +124,7 @@
                         }
 
                         $points = count(array_intersect($selected, $correct)) - count(array_diff($selected, $correct));
+                        $score += $points;
                         $userAnswers[] = [$selected, $correct, $points];
                         break;
                 }
@@ -118,10 +132,19 @@
                 $num++;
             }
 
-
             $q = Quizzes::getQuestions($_SESSION["quizID"]);
-            $qfa = new QuizFinishAnonymous($q, $userAnswers, $arrAns);
-            $qfa->generateHTML();
+
+            $qf = match (isset($_SESSION["email"])){
+                true => new QuizFinishUser($q, $userAnswers, $arrAns),
+                false => new QuizFinishAnonymous($q, $userAnswers, $arrAns)
+            };
+
+            $qf->generateHTML();
+
+            //adding result to database
+            if(isset($_SESSION["email"])){
+                Quizzes::storeResult($_SESSION["quizID"], $_SESSION["email"], $score);
+            }
 
             //cleaning up
             foreach ($_SESSION as $key => $value){
@@ -130,6 +153,7 @@
                 }
             }
         }
+
 
         /**
          * @return array

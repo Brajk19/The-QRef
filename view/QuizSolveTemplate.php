@@ -2,6 +2,7 @@
 
     namespace view;
 
+    use Exception;
     use router\Router;
 
     abstract class QuizSolveTemplate extends PageTemplate {
@@ -22,8 +23,22 @@
          *         ]
          */
         protected ?array $quiz;
+        protected ?Exception $e;
 
         abstract protected function generateBody();
+
+        protected function errorMsg(): void{
+            echo create_element("p", true, ["class" => "quizCreateError", "contents" => $this->e->getMessage()]);
+        }
+
+        protected function pageContent(): void {
+            if (!is_null($this->e)) {
+                $this->errorMsg();
+            } else {
+                $this->quizForm();
+            }
+        }
+
 
 
         /**

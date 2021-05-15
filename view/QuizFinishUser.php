@@ -2,7 +2,7 @@
 
     namespace view;
 
-    class QuizFinishAnonymous extends QuizFinishTemplate {
+    class QuizFinishUser extends QuizFinishTemplate{
 
         public function __construct(array $q, array $a, array $c) {
             parent::__construct();
@@ -13,11 +13,14 @@
             $this->color = $c;      //true -> green, NULL -> yellow, false -> red
         }
 
-        protected function generateBody():void {
-            MainPageHeaderEmpty::printHTML();
+        protected function generateBody(): void{
+            MainPageHeader::printHTML();
             $this->quizStats();
-            echo create_element("p", true ,["contents" => "Please log in to keep track of quizzes you took.",
-                "style" => "text-align:center"]);
+
+            /*
+             * TODO
+             * add commenting and stuff
+             */
         }
     }
 
