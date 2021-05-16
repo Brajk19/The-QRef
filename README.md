@@ -5,7 +5,7 @@ Project for SofaScore Backend Academy
 
     Features:
 
-     -create and your own quizzes
+     -create and edit your own quizzes
   
      -solve quizzes made by other users
   
