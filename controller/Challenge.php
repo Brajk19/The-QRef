@@ -2,74 +2,21 @@
 
     namespace controller;
 
-    use Exception;
-    use exception\QuizNotPublicException;
-    use JetBrains\PhpStorm\NoReturn;
+    use exception\InvalidQuizIdException;
     use model\Quizzes;
+    use view\ChallengeChooseDifficulty;
+    use view\ChallengeFinish;
     use view\QuizFinishAnonymous;
     use view\QuizFinishUser;
-    use view\QuizSolveAnonymous;
     use view\QuizSolveUser;
 
-    class SolveQuiz {
-        private int $quizID;
-        private array $quiz;
-
-        public function __construct(int $id){
-            $this->quizID = $id;
+    class Challenge {
+        public function chooseDifficulty(): void{
+            $csd = new ChallengeChooseDifficulty();
+            $csd->generateHTML();
         }
 
-        public function loggedIn(): void{
-            $x = $this->checkQuizID();
-            if($x == true){
-                $readyQuiz = $this->formatQuiz();
-                $_SESSION["quizID"] = $this->quizID;
-
-                $qsu = new QuizSolveUser(NULL, $readyQuiz);
-                $qsu->generateHTML();
-            }
-            else{
-                $q = new QuizSolveUser($x);
-                $q->generateHTML();
-            }
-        }
-
-        public function anonymous(): void{
-            $x = $this->checkQuizID();
-            $_SESSION["quizID"] = $this->quizID;
-
-            if($x === true){
-                $readyQuiz = $this->formatQuiz();
-
-                $qsv = new QuizSolveAnonymous(NULL, $readyQuiz);
-                $qsv->generateHTML();
-            }
-            else{
-                $q = new QuizSolveAnonymous($x);
-                $q->generateHTML();
-            }
-        }
-
-        private function checkQuizID(): bool|Exception{
-            try{
-                $this->quiz = Quizzes::getQuiz($this->quizID);
-
-                //checks if quiz was called from direct link (user that's not logged in)
-                if(debug_backtrace()[1]["function"] === "anonymous" && $this->quiz[2] === false){
-                    throw new QuizNotPublicException(strval($this->quizID));
-                }
-            }
-            catch (Exception $e){
-                return $e;
-            }
-            return true;
-        }
-
-        /**
-         * Correct answers are kept in $_SESSION
-         * Given answers are in $_POST
-         */
-        public function verifyAnswers(): void{
+        public function verifyChallenge(): void{
             $num = 1;
             $score = 0;
 
@@ -132,49 +79,61 @@
                 $num++;
             }
 
-            $q = Quizzes::getQuestions($_SESSION["quizID"]);
 
-            $qf = match (isset($_SESSION["email"])){
-                true => new QuizFinishUser($q, $userAnswers, $arrAns),
-                false => new QuizFinishAnonymous($q, $userAnswers, $arrAns)
-            };
-
-            $qf->generateHTML();
-
-            //adding result to database
-            if(isset($_SESSION["email"])){
-                Quizzes::storeResult($_SESSION["quizID"], $_SESSION["email"], $score);
-            }
+            $cf = new ChallengeFinish($_SESSION["challenge"], $userAnswers, $arrAns);
+            $cf->generateHTML();
 
             //cleaning up
             foreach ($_SESSION as $key => $value){
-                if($key !== "email" && $key !== "quizID"){
+                if($key !== "email"){
                     unset($_SESSION[$key]);
                 }
             }
-
-            //needed for posting comments
-            $_SESSION["q"] = $q;
-            $_SESSION["ua"] = $userAnswers;
-            $_SESSION["aa"] = $arrAns;
         }
 
+        public function easyChallenge(): void{
+            $quiz = $this->getRandomQuestions(5);
+            $_SESSION["challenge"] = $this->extractQuestionText($quiz);
 
-        /**
-         * @return array
-         * Transforms qref format to format easier to read while generating HTML code in "view".
-         */
-        private function formatQuiz(): array {
+            $c = new QuizSolveUser(NULL, $quiz);
+            $c->generateHTML();
+        }
+
+        public function mediumChallenge(): void{
+            $quiz = $this->getRandomQuestions(10);
+            $_SESSION["challenge"] = $this->extractQuestionText($quiz);
+
+            $c = new QuizSolveUser(NULL, $quiz);
+            $c->generateHTML();
+        }
+
+        public function hardChallenge(): void{
+            $quiz = $this->getRandomQuestions(15);
+            $_SESSION["challenge"] = $this->extractQuestionText($quiz);
+
+            $c = new QuizSolveUser(NULL, $quiz);
+            $c->generateHTML();
+        }
+
+        private function getRandomQuestions(int $n): array{
+            $arr = Quizzes::getRandomQuestions($n);
+
+            $difficulty = match($n){
+                5 => "Easy difficulty",
+                10 => "Medium difficulty",
+                15 => "Hard difficulty"
+            };
+            return $this->formatQuiz($arr, $difficulty);
+        }
+
+        private function formatQuiz(array $qrefQuestions, string $difficulty): array {
             $q = [];
 
-            $q["name"] = $this->quiz[0];
-            $q["description"] = $this->quiz[1];
-            $q["comments"] = $this->quiz[3];
+            $q["name"] = "Challenge";
+            $q["description"] = $difficulty;
+            $q["comments"] = false;
 
             $q["questions"] = [];
-
-            $qrefQuestions = explode(";", $this->quiz[4]);
-            array_pop($qrefQuestions); //last is empty string
 
             foreach($qrefQuestions as $a){
                 $currentQuestion = [];
@@ -215,6 +174,15 @@
             }
 
             return $q;
+        }
+
+        private function extractQuestionText(array $quiz): array{
+            $text = [];
+            foreach ($quiz["questions"] as $q){
+                $text[] = $q["questionText"];
+            }
+
+            return $text;
         }
     }
 

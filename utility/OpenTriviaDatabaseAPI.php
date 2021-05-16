@@ -28,7 +28,7 @@
          */
         public function getQuestion(): string{
             $json = file_get_contents($this->url);
-            $object = json_decode($json);
+            $object = json_decode($json, true);
 
             $qref = $this->qrefSkeleton;
             shuffle($this->num);

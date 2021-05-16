@@ -53,11 +53,6 @@
 
             switch ($q["type"]){
                 case 1:
-                    /*
-                     * TODO
-                     * add correct answers to $_SESSION
-                     * don't forget to destroy them after they are verifed
-                     */
                     for($j = 0; $j < 4; $j++){
                         add_to_element($cell2, create_element("input", true, ["type" => "radio", "name" => "question$i",
                                                             "value" => $q["options"][$j]]));
@@ -105,6 +100,16 @@
 
             echo create_element("h2", true, ["contents" => $this->quiz["description"], "style" => "text-align:center"]);
             echo create_element("br", false, []);
+
+
+            switch (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)[4]["class"]){
+                case "controller\SolveQuiz":
+                    start_form(Router::getInstance()->getRoute("VerifyAnswers"), "POST");
+                    break;
+                case "controller\Challenge":
+                    start_form(Router::getInstance()->getRoute("VerifyChallenge"), "POST");
+                    break;
+            }
 
             start_form(Router::getInstance()->getRoute("VerifyAnswers"), "POST");
 

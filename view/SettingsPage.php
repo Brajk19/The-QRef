@@ -24,6 +24,8 @@
 
         private function dataTable(): string {
             $img = create_element("img", true, ["src" => "../resources/changePassword.png", "height" => "40px"]);
+            $avatar = User::getAvatar($_SESSION["email"]) . ".png";
+            $avatarImg = create_element("img", true, ["src" => "../resources/avatars/$avatar", "height" => "50px"]);
             $button = create_element("a", true, ["href" => Router::getInstance()->getRoute("ChangePasswordForm"),
                 "contents" => $img]);
 
@@ -41,15 +43,20 @@
             $cell31 = create_table_cell(["class" => "cell", "contents" => "Change password..."]);
             $cell32 = create_table_cell(["class" => "cell changePassword", "contents" => $button]);
 
+            $cell41 = create_table_cell(["class" => "cell", "contents" => "Avatar"]);
+            $cell42 = create_table_cell(["class" => "cell", "contents" => $avatarImg, "style" => "text-align:center"]);
+
             $row1 = create_table_row(["contents" => [$cell11, $cell12]]);
             $row2 = create_table_row(["contents" => [$cell21, $cell22]]);
             $row3 = create_table_row(["contents" => [$cell31, $cell32]]);
+            $row4 = create_table_row(["contents" => [$cell41, $cell42]]);
 
             $table = create_element("table", false, ["style" => "width:fit-content; border-collapse:collapse"]);
             add_to_element($table, $headerRow);
             add_to_element($table, $row1);
             add_to_element($table, $row2);
             add_to_element($table, $row3);
+            add_to_element($table, $row4);
             close_element($table);
 
             return $table;

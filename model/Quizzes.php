@@ -188,6 +188,86 @@
 
             return $data;
         }
+
+        /**
+         * @param string $email
+         * @return array
+         * Returns names and id of all quizzes user with given email has created.
+         * Format: [[name => quizName, id => quizID, description => "bla bla"], [], ...]
+         */
+        public static function getUserQuizzes(string $email): array{
+            $db = Database::getInstance();
+
+            $query = <<<SQL
+                SELECT quiz.name, quiz.id, quiz.description
+                FROM quiz
+                WHERE quiz.email = :email
+            SQL;
+
+            $data = $db->prepare($query);
+            $data->execute([":email" => $email]);
+
+            return $data->fetchAll();
+        }
+
+        /**
+         * @param string $email
+         * @return array
+         * Returns names and id of all quizzes except ones which are made by given email.
+         * Format: [[name => quizName, id => quizID, description => "bla bla"], [], ...]
+         */
+        public static function getAllQuizzesExcept(string $email): array{
+            $db = Database::getInstance();
+
+            $query = <<<SQL
+                SELECT quiz.name, quiz.id, quiz.description
+                FROM quiz
+                WHERE quiz.email <> :email
+            SQL;
+
+            $data = $db->prepare($query);
+            $data->execute([":email" => $email]);
+
+            return $data->fetchAll();
+        }
+
+        /**
+         * @param int $size Number of questions
+         * @return string
+         * Returns all questions from database in one .qref string.
+         */
+        public static function getRandomQuestions(int $size): array{
+            $db = Database::getInstance();
+
+            $query = <<<SQL
+                SELECT quiz.qref
+                FROM quiz
+            SQL;
+
+            $data = $db->prepare($query);
+            $data->execute();
+            $data = $data->fetchAll();
+
+            $q = "";
+            foreach ($data as $qref){
+                $q .= $qref["qref"];
+            }
+
+            $arr = explode(";", $q);
+            array_pop($arr);
+
+            $questions = [];
+
+            while(count($questions) !== $size){
+                $index = array_rand($arr);
+
+                $questions[] = trim($arr[$index]);
+                $questions = array_unique($questions);
+            }
+
+            return $questions;
+        }
+
     }
 
 ?>

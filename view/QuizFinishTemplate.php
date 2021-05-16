@@ -16,9 +16,15 @@
                 false => create_element("td", false, ["style" => "background-color:red", "class" => "cell"]),
             };
 
-            foreach ($selected as $s){
-                add_to_element($cell2, create_element("p", true, ["contents" => $s]));
+            if(empty($selected)){
+                add_to_element($cell2, create_element("p", true, ["contents" => "EMPTY"]));
             }
+            else{
+                foreach ($selected as $s){
+                    add_to_element($cell2, create_element("p", true, ["contents" => $s]));
+                }
+            }
+
             close_element($cell2);
 
             $cell3 = create_element("td", false, ["class" => "cell"]);

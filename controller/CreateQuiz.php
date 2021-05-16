@@ -16,9 +16,6 @@
             $cq->generateHTML();
         }
 
-        public function addRandomQuestion(): void{
-
-        }
 
         public function verifyQuiz(): void{
             $public = isset($_POST["public"]) ? "1" : "0";

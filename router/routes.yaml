@@ -71,14 +71,46 @@ AddComment:
     action: addComment
 
 QuizList:
-    controller: UNKNOWN
-    action: UNKNOWN
+    controller: QuizList
+    action: showAllQuizzes
+    id: <id>
+
+DetailedView:
+    controller: QuizList
+    action: detailedView
+    id: <id>
+
+EditQuestion:
+    controller: EditQuiz
+    action: editQuiz
+    id: <id>
+
+ApplyChanges:
+    controller: EditQuiz
+    action: applyChanges
+    id: <id>
 
 Stats:
-    controller: UNKNOWN
-    action: UNKNOWN
+    controller: Stats
+    action: viewStats
 
 Challenge:
-    controller: UNKNOWN
-    action: UNKNOWN
+    controller: Challenge
+    action: chooseDifficulty
+
+EasyChallenge:
+    controller: Challenge
+    action: easyChallenge
+
+MediumChallenge:
+    controller: Challenge
+    action: mediumChallenge
+
+HardChallenge:
+    controller: Challenge
+    action: hardChallenge
+
+VerifyChallenge:
+    controller: Challenge
+    action: verifyChallenge
 

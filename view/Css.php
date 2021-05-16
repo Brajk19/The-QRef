@@ -42,6 +42,18 @@
 
             addCustomClass("quizTable", ["text-align" => "center", "margin" => "auto", "border" => "2px solid black",
                 "border-collapse" => "collapse", "font-size" => "20px"]);
+
+            addCustomClass("quizList", ["display" => "grid", "grid-template-columns" => "50% 50%"]);
+            addCustomClass("quizName", ["text-decoration" => "none", "color" => "black"]);
+            addCustomClass("quizName:hover", ["font-weight" => "900"]);
+            addCustomClass("quizListCell", ["padding" => "30px"]);
+
+            addCustomClass("initial", ["text-align" => "center", "text-decoration" => "none", "color" => "black",
+                "display" => "block", "font-size" => "35px"]);
+            addCustomClass("initial:hover", ["font-weight" => "900"]);
+            addCustomClass("easy:hover", ["color" => "lightgreen"]);
+            addCustomClass("medium:hover", ["color" => "gold"]);
+            addCustomClass("hard:hover", ["color" => "red"]);
         }
     }
 

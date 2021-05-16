@@ -14,9 +14,8 @@
 
         private function showErrors(): void{
             if(isset($_SESSION["errorMessage"])){
-                echo "test" . "<br>";
                 foreach ($_SESSION["errorMessage"] as $error){
-                    echo create_element("p", true, ["style" => "color:red", "contents" => $error]);
+                    echo create_element("p", true, ["style" => "color:red; text-align:center", "contents" => $error]);
                 }
 
                 unset($_SESSION["errorMessage"]);
@@ -24,13 +23,15 @@
         }
 
         protected function generateBody():void {
+            echo create_element("br", false, []);
+            echo create_element("h1", true, ["contents" => "Registration", "style" => "text-align:center"]);
             start_form($this->router->getRoute("VerifyRegistration"), "POST");
             $firstName = isset($_SESSION["savedFirstName"]) ? $_SESSION["savedFirstName"] : "";
             $lastName = isset($_SESSION["savedLastName"]) ? $_SESSION["savedLastName"] : "";
             $dateOfBirth = isset($_SESSION["savedDateOfBirth"]) ? $_SESSION["savedDateOfBirth"] : "";
             $email = isset($_SESSION["savedEmail"]) ? $_SESSION["savedEmail"] : "";
 
-            create_table([]);
+            create_table(["style" => "margin:auto"]);
             $cell1 = create_table_cell(["contents" => create_element("label", true, ["contents" => "First name: "])]);
             $cell2 = create_table_cell(["contents" => create_element("input", true, ["name" => "firstName", "type" => "text",
                                                                                 "placeholder" => "First name", "value" => $firstName])]);
@@ -67,8 +68,16 @@
             end_table();
 
             echo Resource::getAvatarsHTML();
-            echo create_element("input", true, ["colspan" => "2", "type" => "submit", "value" => "Register"]);
+            echo create_element("input", true, ["colspan" => "2", "type" => "submit", "value" => "Register",
+                "style" => "margin-left:41%"]);
+            echo create_element("br", false, []);
+            echo create_element("br", false, []);
 
+            end_form();
+
+            start_form($this->router->getRoute("Login"), "POST");
+            echo create_element("input", true, ["colspan" => "2", "type" => "submit", "value" => "Return",
+                "style" => "margin-left:41%"]);
             end_form();
 
             $this->showErrors();
