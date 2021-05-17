@@ -173,7 +173,7 @@
             $data->execute([":quizID" => $quizID]);
             $data = $data->fetchAll();
 
-            // _text_ will be underline
+            // _text_ will be underlined
             // *text* will be bold
             for ($i = 0; $i < count($data); $i++){
                 while(substr_count($data[$i]["comment"], "*") >= 2){

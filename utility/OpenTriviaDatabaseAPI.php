@@ -33,7 +33,7 @@
             $qref = $this->qrefSkeleton;
             shuffle($this->num);
             $validQuestion = true; //if retrieved question contains ',' or ';' it will mess up the .qref format
-                                    //in that case function is just called again
+                                    //in that case function is just called again (line 78)
 
             foreach ($object as $item){
                 if(is_array($item)){
@@ -47,12 +47,14 @@
 
                                     if(str_contains($value, ";")) $validQuestion = false;
                                     break;
+
                                 case "correct_answer":
                                     $index = $this->num[0];
                                     $qref = str_replace(["<option$index>", "<correct>"], $value, $qref);
 
                                     if(str_contains($value, ";") || str_contains($value, ",")) $validQuestion = false;
                                     break;
+
                                 case "incorrect_answers":
                                     $i = 1;
 

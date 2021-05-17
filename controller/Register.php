@@ -43,6 +43,7 @@
             }
 
             if(!empty($_SESSION["errorMessage"])){
+                //saving info so after page reload user won't have to type in everything again
                 $_SESSION["savedFirstName"] = $_POST["firstName"];
                 $_SESSION["savedLastName"] = $_POST["lastName"];
                 $_SESSION["savedDateOfBirth"] = $_POST["dateOfBirth"];
@@ -51,7 +52,7 @@
                 $this->retryRegistration();
             }
             else{
-                //uspjesna registracija
+                //successful registration
                 \model\Register::addNewUser($_POST["firstName"], $_POST["lastName"], $_POST["dateOfBirth"],
                                             $_POST["email"], $_POST["password"], $_POST["avatar"]);
 

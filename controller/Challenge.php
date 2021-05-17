@@ -16,6 +16,9 @@
             $csd->generateHTML();
         }
 
+        /**
+         * Verifies each answers and displays it along wiht number of points.
+         */
         public function verifyChallenge(): void{
             $num = 1;
             $score = 0;
@@ -126,6 +129,12 @@
             return $this->formatQuiz($arr, $difficulty);
         }
 
+        /**
+         * @param array $qrefQuestions
+         * @param string $difficulty
+         * @return array
+         * Parses the .qref format of quiz and returns it as an array.
+         */
         private function formatQuiz(array $qrefQuestions, string $difficulty): array {
             $q = [];
 

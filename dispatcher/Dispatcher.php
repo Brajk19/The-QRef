@@ -31,10 +31,13 @@
 
             $route = substr($route, 1);
             $this->arr = explode("/", $route);
-            $this->arr[0] = ucfirst($this->arr[0]);
+
+            $this->arr[0] = ucfirst($this->arr[0]); //weirdo Google Chrome would sometimes decapitalize class name ¯\_(ツ)_/¯
 
 
             if(isset($_COOKIE["sessionID"])){
+
+                //checks if user is logged in and if cookie is valid
                 if(!Cookie::checkSessionID($_COOKIE["sessionID"])){
                     Cookie::deleteSession($_COOKIE["sessionID"]);
                     Cookie::deleteCookie();
@@ -90,6 +93,11 @@
             $object->$action();
         }
 
+        /**
+         * @param string $routeName
+         * @return bool
+         * Returns true if $routeName matches URL user "entered".
+         */
         private function checkRoute(string $routeName): bool {
 
             if(count($this->arr) === 3){

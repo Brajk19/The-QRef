@@ -77,6 +77,10 @@
             return false;
         }
 
+        /**
+         * @param string $newPassword
+         * Updates password in database.
+         */
         public static function changePassword(string $newPassword): void{
             $db = Database::getInstance();
             $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);

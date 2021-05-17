@@ -17,6 +17,9 @@
         }
 
 
+        /**
+         * Checks if every field is set and whether or not questions are in valid format.
+         */
         public function verifyQuiz(): void{
             $public = isset($_POST["public"]) ? "1" : "0";
             $comments = isset($_POST["enableComments"]) ? "1" : "0";
@@ -109,6 +112,12 @@
             return true;
         }
 
+        /**
+         * @param string $qref
+         * @param string $public
+         * @param string $comments
+         * Stores quiz to database and displays message to user.
+         */
         private function successfulEntry(string $qref, string $public, string $comments): void{
             \model\CreateQuiz::storeQuiz($_POST["quizName"], $_POST["quizDescription"], $public, $comments, $qref);
 

@@ -69,7 +69,7 @@
         public static function setCookie(string $sessionID): void{
 
             setcookie("sessionID", $sessionID, time() + 86400, "/");
-            //jednom dnevno je potrebno ulogirat se (naravno osim ako se ne odjavis)
+            //once logged in, you will stay logged in for 24 hours (unless you logged out)
         }
 
         public static function deleteCookie(): void{

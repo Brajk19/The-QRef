@@ -19,6 +19,9 @@
             $this->quizID = $id;
         }
 
+        /**
+         * Displays page with questions for logged in user.
+         */
         public function loggedIn(): void{
             $x = $this->checkQuizID();
             if($x == true){
@@ -34,6 +37,10 @@
             }
         }
 
+        /**
+         * Displays page with questions when no one is logged in.
+         * Only public quizzes are available.
+         */
         public function anonymous(): void{
             $x = $this->checkQuizID();
             $_SESSION["quizID"] = $this->quizID;
@@ -50,6 +57,11 @@
             }
         }
 
+        /**
+         * @return bool|Exception
+         * Returns true if quiz is public.
+         * Throws exception otherwise.
+         */
         private function checkQuizID(): bool|Exception{
             try{
                 $this->quiz = Quizzes::getQuiz($this->quizID);

@@ -4,6 +4,15 @@
 
 
     class Register {
+        /**
+         * @param string $firstName
+         * @param string $lastName
+         * @param string $dateOfBirth
+         * @param string $email
+         * @param string $password
+         * @param string $avatar
+         * Stores new user in database.
+         */
         public static function addNewUser(string $firstName, string $lastName, string $dateOfBirth,
                                           string $email, string $password, string $avatar):void {
 
